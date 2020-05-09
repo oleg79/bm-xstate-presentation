@@ -6,14 +6,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@xstate/immer": "^0.1.0",
+    "@xstate/react": "^0.8.1",
+    "@xstate/test": "^0.4.0",
+    "framer-motion": "^1.10.3",
+    "immer": "^6.0.5",
     "react": "^16.13.1",
+    "react-code-blocks": "^0.0.7",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.0",
+    "xstate": "^4.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
