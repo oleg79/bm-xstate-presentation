@@ -12,12 +12,14 @@ const GlobalStyles = createGlobalStyle`
   * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
   }
 
   body {
     background-color: ${blueGrey[800]};
     color: ${blueGrey[50]};
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
   }
 `;
 
@@ -31,8 +33,21 @@ const presentationMachine = Machine({
       }
     },
     finiteStateMachines: {
-      on: {
-        PREV: 'intro'
+      id: 'finite-state-machines',
+      initial: 'title',
+      states: {
+        title: {
+          on: {
+            PREV: '#presentation.intro',
+            NEXT: 'example'
+          }
+        },
+        example: {
+          on: {
+            PREV: 'title',
+            // NEXT: 'finiteStateMachines'
+          }
+        }
       }
     },
   }
@@ -42,7 +57,6 @@ const Presentation = () => {
   const [state, send] = useMachine(presentationMachine);
 
   const navigate = ({code}) => {
-    console.log(code);
     switch(code) {
       case 'ArrowLeft': send('PREV');
       break;
@@ -61,8 +75,9 @@ const Presentation = () => {
   return (
     <>
       <GlobalStyles/>
-      {state.matches('intro') && <Intro name='intro'/>}
-      {state.matches('finiteStateMachines') && <FiniteStateMachines name='finite-state-machines'/>}
+      {state.matches('intro') &&<Intro/>}
+
+      {state.matches('finiteStateMachines') && <FiniteStateMachines state={state}/>}
     </>
   );
 };

@@ -6,17 +6,19 @@ const StyledMotionDiv = styled(motion.div)`
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  ${p => p.handleContentCentering && 'align-items: center;'}
+  ${p => p.handleContentCentering && 'justify-content: center;'}
+  position: relative;
 `;
 
-export const SlideContainer = ({children, name}) => (
+export const SlideContainer = ({children, name, handleContentCentering = true}) => (
   <AnimatePresence>
     <StyledMotionDiv
       key={name}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      handleContentCentering={handleContentCentering}
     >
       {children}
     </StyledMotionDiv>

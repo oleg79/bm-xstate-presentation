@@ -5,10 +5,12 @@ import {SlideTitle} from '../components/SlideTitle';
 
 export const Intro = () => {
   return (
-    <SlideContainer>
+    <SlideContainer name='intro'>
       <SlideTitle>
         <Emoji>✨</Emoji>
+        <Emoji>🦄</Emoji>
         The beautiful world of XState
+        <Emoji>🦄</Emoji>
         <Emoji>✨</Emoji>
       </SlideTitle>  
     </SlideContainer>
