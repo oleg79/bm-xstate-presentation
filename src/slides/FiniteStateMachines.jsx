@@ -4,7 +4,18 @@ import {useMachine} from '@xstate/react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import styled, {css} from 'styled-components';
 import {green, teal} from 'material-ui-colors';
+import { CopyBlock, dracula } from 'react-code-blocks';
 import {SlideContainer} from '../components/SlideContainer';
+import {
+  trackerVariants,
+  stateVariants,
+  rightArrowVariants,
+  leftArrowVariants,
+  downArrowVariants,
+  upArrowVariants,
+  titleVariants
+} from './animationVariants'
+
 
 const Title = styled(motion.h1)`
   position: absolute;
@@ -16,7 +27,7 @@ const ExampleContainer = styled(motion.div)`
   height: 600px;
   border: 4px solid ${green[400]};
   border-radius: 20px;
-  align-self: center;
+  align-self: flex-start;
   margin-left: 20px;
   position: relative;
 `
@@ -61,22 +72,22 @@ const StateLabel = styled.div`
   ${p => p.initial && css`
     &:after {
       position: absolute;
-      content: 'i';
+      content: '0';
       font-style: italic;
       font-size: 30px;
       bottom: -5px;
-      right: -10px;
+      right: -20px;
     }
   `}
 
   ${p => p.final && css`
     &:after {
       position: absolute;
-      content: 'F';
+      content: 'f';
       font-style: italic;
       font-size: 30px;
       bottom: -5px;
-      right: -15px;
+      right: -10px;
     }
   `}
 `;
@@ -135,81 +146,6 @@ const ArrowsContainer = styled.div`
   })(p.position)}
 `
 
-
-const titleVariants = {
-  asTitle: {
-    top: '50%',
-    left: '50%',
-    transform: 'translateY(-50%) translateX(-50%)',
-    fontSize: '70px',
-    opacity: 1
-  },
-  asHeader: {
-    top: '10px',
-    left: '20px',
-    transform: 'translateY(0%) translateX(0%)',
-    fontSize: '20px',
-    opacity: 1
-  }
-};
-
-const stateVariants = {
-  active: {
-    opacity: 1
-  },
-  inactive: {
-    opacity: 0.4
-  }
-};
-
-const leftArrowVariants = {
-  idle: {
-    rotate: 135,
-    scale: 1
-  },
-  tapped: {
-    rotate: 135,
-    scale: 1.5,
-    borderColor: teal[700]
-  }
-};
-
-const rightArrowVariants = {
-  idle: {
-    rotate: -45,
-    scale: 1
-  },
-  tapped: {
-    rotate: -45,
-    scale: 1.5,
-    borderColor: teal[700]
-  }
-};
-
-const upArrowVariants = {
-  idle: {
-    rotate: -135,
-    scale: 1
-  },
-  tapped: {
-    rotate: -135,
-    scale: 1.5,
-    borderColor: teal[700]
-  }
-}
-
-const downArrowVariants = {
-  idle: {
-    rotate: 45,
-    scale: 1
-  },
-  tapped: {
-    rotate: 45,
-    scale: 1.5,
-    borderColor: teal[700]
-  }
-}
-
 const Arrow = ({onTap, variants}) => (
   <ArrowBase
     initial='idle'
@@ -228,8 +164,8 @@ const Tracker = styled(motion.div)`
   opacity: 0.2;
 `
 
-const exampleMachine = Machine({
-  id: 'example-machine',
+const interactionMachine = Machine({
+  id: 'interaction-machine',
   initial: 'A',
   states: {
     A: {
@@ -266,25 +202,6 @@ const exampleMachine = Machine({
   }
 });
 
-const trackerVariants = {
-  topLeft: {
-    top: '25px',
-    left: '25px'
-  },
-  topRight: {
-    top: '25px',
-    left: '417px'
-  },
-  bottomRight: {
-    top: '417px',
-    left: '417px'
-  },
-  bottomLeft: {
-    top: '417px',
-    left: '25px'
-  }
-};
-
 const Example = () => {
   const animationControls = useAnimation();
   const [animateState, setAnimateState] = React.useState('topLeft');
@@ -293,22 +210,15 @@ const Example = () => {
   const toCTrackerAnimation = () => setAnimateState('bottomRight');
   const toDTrackerAnimation = () => setAnimateState('bottomLeft');
 
-  const [state, send] = useMachine(exampleMachine, {
-    actions: {
-      toBTrackerAnimation,
-      toCTrackerAnimation,
-      toDTrackerAnimation
-    }
+  const [state, send] = useMachine(interactionMachine, {
+    actions: {toBTrackerAnimation, toCTrackerAnimation, toDTrackerAnimation}
   });
 
   animationControls.start({
     transform: 'translateX(0%)',
     opacity: 1,
-    transition: {
-      delay: 0.5
-    }
-  })
-  
+    transition: {delay: 0.5}
+  });
 
   return (
     <AnimatePresence>
@@ -377,18 +287,126 @@ const Example = () => {
   );
 };
 
+const TermsContainer = styled(motion.div)`
+  width: 600px;
+  height: 600px;
+  align-self: center;
+  position: relative;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const CodeContainer = styled(TermsContainer)`
+  width: 800px;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  overflow: auto;
+`;
+
+const TermText = styled(motion.div)`
+  font-size: 30px;
+  span {
+    font-style: italic;
+  }
+`
+
+const Terms = () => (
+  <AnimatePresence>
+    <TermsContainer
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <TermText><span>Q</span> - set of all states</TermText>  
+      <TermText><span>∑</span> - inputs</TermText>
+      <TermText><span>q0</span> - initial state</TermText>
+      <TermText><span>F</span> - set of final states</TermText>
+      <TermText><span>δ</span> - transition function <span>Q*∑ -> Q</span></TermText>
+    </TermsContainer>
+  </AnimatePresence>
+);
+
+const Code = () => (
+  <AnimatePresence>
+    <CodeContainer
+      initial={{ opacity: 0, right: '-800px' }}
+      animate={{ opacity: 1, right: '0px' }}
+      exit={{ opacity: 0, right: '0px' }}
+    >
+      <CopyBlock
+        text={`
+{
+  id: 'interaction-machine',
+  initial: 'A',
+  states: {
+    A: {
+      on: {
+        A_TO_B: {
+          target: 'B',
+          actions: ['toBTrackerAnimation']
+        },
+      }
+    },
+    B: {
+      on: {
+        B_TO_C: {
+          target: 'C',
+          actions: ['toCTrackerAnimation']
+        }
+      }
+    },
+    C: {
+      on: {
+        C_TO_B: {
+          target: 'B',
+          actions: ['toBTrackerAnimation']
+        },
+        C_TO_D: {
+          target: 'D',
+          actions: ['toDTrackerAnimation']
+        }
+      }
+    },
+    D: {
+      type: 'final'
+    }
+  }
+
+`}
+        language='javascript'
+        theme={dracula}
+        codeBlock
+      /> 
+    </CodeContainer>
+  </AnimatePresence>
+);
+
+const ContentContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 0 50px;
+  justify-content: space-between;
+`
+
 export const FiniteStateMachines = ({state}) => {
   return (
-    <SlideContainer name='finite-state-machines' handleContentCentering={false}>
+    <SlideContainer name='finite-state-machines'>
       <Title
-        animate={state.matches('finiteStateMachines.title') ? 'asTitle' : 'asHeader'}
+        animate={state.matches('finiteStateMachines.intro') ? 'asTitle' : 'asHeader'}
         initial='asTitle'
         variants={titleVariants}
         transition={{ duration: 0.5 }}
       >
         Finite State Machines
       </Title>
-      {state.matches('finiteStateMachines.example') && <Example/>}
+      <ContentContainer>
+        {state.matches('finiteStateMachines.content') && <Example/>}
+        {state.matches('finiteStateMachines.content.terms') && <Terms/>}
+        {state.matches('finiteStateMachines.content.configurationSample') && <Code state={state}/>}
+      </ContentContainer>
     </SlideContainer>
   );  
 };

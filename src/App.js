@@ -34,18 +34,35 @@ const presentationMachine = Machine({
     },
     finiteStateMachines: {
       id: 'finite-state-machines',
-      initial: 'title',
+      initial: 'intro',
       states: {
-        title: {
+        intro: {
           on: {
             PREV: '#presentation.intro',
-            NEXT: 'example'
+            NEXT: 'content'
           }
         },
-        example: {
-          on: {
-            PREV: 'title',
-            // NEXT: 'finiteStateMachines'
+        content: {
+          initial: 'interaction',
+          states: {
+            interaction: {
+              on: {
+                PREV: '#presentation.intro',
+                NEXT: 'terms'
+              },
+            },
+            terms: {
+              on: {
+                PREV: 'interaction',
+                NEXT: 'configurationSample'
+              },
+            },
+            configurationSample: {
+              on: {
+                PREV: 'terms',
+                // NEXT: 'terms'
+              },
+            }
           }
         }
       }
