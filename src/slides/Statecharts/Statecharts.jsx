@@ -8,6 +8,8 @@ import {HierarchicalExample} from './HierarchicalExample';
 import {HierarchicalCode} from './HierarchicalCode';
 import {ParallelExample} from './ParallelExample';
 import {ParallelCode} from './ParallelCode';
+import {ExtendedStateExample} from './ExtendedStateExample';
+import {ExtendedStateCode} from './ExtendedStateCode';
 
 const BigText = styled(motion.div)`
   width: 70%;
@@ -59,6 +61,9 @@ export const Statecharts = ({state}) => {
 
       {state.matches('statecharts.content.examples.parallel.interaction') && <ParallelExample/>}
       {state.matches('statecharts.content.examples.parallel.code') && <ParallelCode/>}
+
+      {state.matches('statecharts.content.examples.extendedState.interaction') && <ExtendedStateExample/>}
+      {state.matches('statecharts.content.examples.extendedState.code') && <ExtendedStateCode/>}
 
     </SlideContainer>
   );  

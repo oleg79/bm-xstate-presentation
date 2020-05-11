@@ -34,38 +34,41 @@ const mainState = `{
 
 const bState = `{
   B: {
+    type: 'parallel',
     on: {
       B_TO_C: 'C'
     },
-    initial: 'B1',
     states: {
-      B1: {
+      size: {
+        initial: 'normal',
+        states: {
+          normal: {},
+          small: {},
+          big: {}
+        },
         on: {
-          B1_TO_B2: 'B2',
-          B1_TO_B4: 'B4'
+          SMALL:  '.small',
+          NORMAL: '.normal',
+          BIG:    '.big'
         }
       },
-      B2: {
+      background: {
+        initial: 'transparent',
+        states: {
+          transparent: {},
+          cyan: {},
+          lightBlue: {},
+          teal: {}
+        },
         on: {
-          B2_TO_B1: 'B1',
-          B2_TO_B3: 'B3'
-        }
-      },
-      B3: {
-        on: {
-          B3_TO_B2: 'B2',
-          B3_TO_B4: 'B4'
-        }
-      },
-      B4: {
-        on: {
-          B4_TO_B3: 'B3',
-          B4_TO_B1:'B1',
-          B4_TO_C: '#hierarchical-machine.C'
+          TRANSPARENT:  '.transparent',
+          CYAN:         '.cyan',
+          LIGHT_BLUE:   '.lightBlue',
+          TEAL:         '.teal'
         }
       }
     }
-  }
+  },
 }`
 
 const ParallelCodeContainer = styled(motion.div)`

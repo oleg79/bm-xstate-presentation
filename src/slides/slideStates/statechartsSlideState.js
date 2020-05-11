@@ -57,16 +57,28 @@ const examplesState = {
           code: {
             on: {
               PREV: 'interaction',
-              // NEXT: '#statecharts-content-examples.parallel'
+              NEXT: '#statecharts-content-examples-extendedState'
             }
           }
         },
       },
 
       extendedState: {
-        on: {
-          PREV: 'parallel',
-          // NEXT: 'parallelExample'
+        id: 'statecharts-content-examples-extendedState',
+        initial: 'interaction',
+        states: {
+          interaction: {
+            on: {
+              PREV: '#statecharts-content-examples-parallel',
+              NEXT: 'code'
+            }
+          },
+          code: {
+            on: {
+              PREV: 'interaction',
+              // NEXT: 'parallelExample'
+            }
+          }
         }
       }
     },

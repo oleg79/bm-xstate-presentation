@@ -36,8 +36,8 @@ const GlobalStyles = createGlobalStyle`
 
 const presentationMachine = Machine({
   id: 'presentation',
-  initial: 'intro',
-  // initial: 'statecharts',
+  // initial: 'intro',
+  initial: 'statecharts',
   states: {
     ...introSlideState,
     ...finiteStateMachinesSlideState,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Machine} from 'xstate';
+import {Machine, assign} from 'xstate';
 import {useMachine} from '@xstate/react';
 import { motion, AnimatePresence } from 'framer-motion'
 import styled, {css} from 'styled-components';
@@ -15,12 +15,13 @@ import {
 
 const ExampleContainer = styled(motion.div)`
   width: 600px;
-  height: 600px;
-  border: 4px solid ${green[400]};
-  border-radius: 20px;
-  align-self: flex-start;
-  margin-left: 20px;
+  height: ${p => p.height || '600px'};
+  ${p => p.withBorder && css`
+    border: 4px solid ${green[400]};
+    border-radius: 20px;
+  `}
   position: relative;
+  ${p => p.customStyles}
 `
 
 const StateCircle = styled(motion.div)`
@@ -161,58 +162,35 @@ const Container = styled(motion.div)`
   justify-content: space-evenly;
 `
 
-const bState = {
-  B: {
-    entry: ['toBTrackerAnimation'],
-    exit: ['toB1TrackerAnimation'],
-    on: {
-      B_TO_C: 'C'
-    },
-    initial: 'B1',
-    states: {
-      B1: {
-        entry: ['toB1TrackerAnimation'],
-        on: {
-          B1_TO_B2: 'B2',
-          B1_TO_B4: 'B4'
-        }
-      },
-      B2: {
-        entry: ['toB2TrackerAnimation'],
-        on: {
-          B2_TO_B1: 'B1',
-          B2_TO_B3: 'B3'
-        }
-      },
-      B3: {
-        entry: ['toB3TrackerAnimation'],
-        on: {
-          B3_TO_B2: 'B2',
-          B3_TO_B4: 'B4',
-        }
-      },
-      B4: {
-        entry: ['toB4TrackerAnimation'],
-        on: {
-          B4_TO_B3: 'B3',
-          B4_TO_B1: 'B1',
-          B4_TO_C: '#hierarchical-machine.C'
-        }
-      }
-    }
-  },
-}
+const Input = styled.input`
+  width: 100%;
+  height: 50px;
+  font-size: 30px;
+`;
 
-const hierarchicalMachine = Machine({
-  id: 'hierarchical-machine',
+const extendedStateMachine = Machine({
+  id: 'extended-state-machine',
   initial: 'A',
+  context: {
+    inputValue: ''
+  },
   states: {
     A: {
       on: {
         A_TO_B: 'B'
       }
     },
-    ...bState,
+    B: {
+      entry: ['toBTrackerAnimation', 'focusInput'],
+      on: {
+        B_TO_C: 'C',
+        HANDLE_INPUT: {
+          actions: assign({
+            inputValue: (_, {data}) => data
+          })
+        }
+      }
+    },
     C: {
       entry: ['toCTrackerAnimation'],
       on: {
@@ -227,30 +205,34 @@ const hierarchicalMachine = Machine({
   }
 });
 
-export const HierarchicalExample = () => {
+export const ExtendedStateExample = () => {
   const [animateState, setAnimateState] = React.useState('topLeft');
-  const [animateBState, setAnimateBState] = React.useState('topLeft');
+  const inputRef = React.useRef(null);
 
   const toBTrackerAnimation = () => setAnimateState('topRight');
   const toCTrackerAnimation = () => setAnimateState('bottomRight');
   const toDTrackerAnimation = () => setAnimateState('bottomLeft');
 
-  const toB1TrackerAnimation = () => setAnimateBState('topLeft');
-  const toB2TrackerAnimation = () => setAnimateBState('topRight');
-  const toB3TrackerAnimation = () => setAnimateBState('bottomRight');
-  const toB4TrackerAnimation = () => setAnimateBState('bottomLeft');
+  const focusInput = () => {
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 0);
+    }
+  };
 
-  const [state, send] = useMachine(hierarchicalMachine, {
+  const [state, send] = useMachine(extendedStateMachine, {
     actions: {
       toBTrackerAnimation,
       toCTrackerAnimation,
       toDTrackerAnimation,
-      toB1TrackerAnimation,
-      toB2TrackerAnimation,
-      toB3TrackerAnimation,
-      toB4TrackerAnimation,
+      focusInput
     }
   });
+
+  const {inputValue} = state.context;
+
+  const handleChange = e => {
+    send({type: 'HANDLE_INPUT', data: e.target.value})
+  }
 
   return (
     <AnimatePresence>
@@ -259,7 +241,7 @@ export const HierarchicalExample = () => {
         animate={{transform: 'translateX(0%)', opacity: 1}}
         exit={{ transform: 'translateX(-50%)', opacity: 0 }}
       >
-        <ExampleContainer>
+        <ExampleContainer withBorder>
 
           <Tracker
             initial='topLeft'
@@ -318,77 +300,13 @@ export const HierarchicalExample = () => {
 
         </ExampleContainer>
 
-        <ArrowsContainer position='bottom' width='130px'>
-          <Arrow variants={leftArrowVariants} onTap={() => send('B4_TO_C')}/>
-        </ArrowsContainer>
-
         <ExampleContainer
           initial='inactive'
           variants={{active: {opacity: 1}, inactive: {opacity: 0.2}}}
           animate={state.matches('B') ? 'active' : 'inactive'}
         >
 
-          <Tracker
-            initial='topLeft'
-            animate={animateBState}
-            variants={trackerVariants}
-          />
-
-          <StateCircle
-            position='topLeft'
-            initial='active'
-            animate={state.matches('B.B1') ? 'active' : 'inactive'}
-            variants={stateVariants}
-          >
-            <StateLabel initial>B1</StateLabel>
-          </StateCircle>
-
-          <ArrowsContainer position='top'>
-            <Arrow variants={leftArrowVariants} onTap={() => send('B2_TO_B1')}/>
-            <Arrow variants={rightArrowVariants} onTap={() => send('B1_TO_B2')}/>
-          </ArrowsContainer>
-
-          <StateCircle
-            position='topRight'
-            initial='inactive'
-            animate={state.matches('B.B2') ? 'active' : 'inactive'}
-            variants={stateVariants}
-          >
-            <StateLabel>B2</StateLabel>
-          </StateCircle>
-
-          <ArrowsContainer position='right'>
-            <Arrow variants={upArrowVariants} onTap={() => send('B3_TO_B2')}/>
-            <Arrow variants={downArrowVariants} onTap={() => send('B2_TO_B3')}/>
-          </ArrowsContainer>
-
-          <StateCircle
-            position='bottomRight'
-            initial='inactive'
-            animate={state.matches('B.B3') ? 'active' : 'inactive'}
-            variants={stateVariants}
-          >
-            <StateLabel>B3</StateLabel>
-          </StateCircle>
-
-          <ArrowsContainer position='bottom'>
-            <Arrow variants={leftArrowVariants} onTap={() => send('B3_TO_B4')}/>
-            <Arrow variants={rightArrowVariants} onTap={() => send('B4_TO_B3')}/>
-          </ArrowsContainer>
-
-          <StateCircle
-            position='bottomLeft'
-            initial='inactive'
-            animate={state.matches('B.B4') ? 'active' : 'inactive'}
-            variants={stateVariants}
-          >
-            <StateLabel>B4</StateLabel>
-          </StateCircle>
-
-          <ArrowsContainer position='left'>
-            <Arrow variants={upArrowVariants} onTap={() => send('B4_TO_B1')}/>
-            <Arrow variants={downArrowVariants} onTap={() => send('B1_TO_B4')}/>
-          </ArrowsContainer>
+          <Input disabled={!state.matches('B')} ref={inputRef} value={inputValue} onChange={handleChange}/>
 
         </ExampleContainer>
       </Container>
