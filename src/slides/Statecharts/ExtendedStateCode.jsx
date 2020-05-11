@@ -27,7 +27,7 @@ const mainState = `{
         B_TO_C: 'C',
         HANDLE_INPUT: {
           actions: assign({
-            inputValue: (_, {data}) => data
+            inputValue: (context, event) => event.data  //{type: 'HANDLE_INPUT', data: <input data>}
           })
         }
       }
