@@ -21,7 +21,7 @@ export const problemsOfFSMSlideState = {
           sideEffectsProblem: {
             on: {
               PREV: 'stateExlposionProblem',
-              NEXT: '#state-charts'
+              NEXT: '#statecharts'
             },
           }
         }

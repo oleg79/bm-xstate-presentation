@@ -338,30 +338,18 @@ const Code = () => (
   states: {
     A: {
       on: {
-        A_TO_B: {
-          target: 'B',
-          actions: ['toBTrackerAnimation']
-        },
+        A_TO_B: 'B'
       }
     },
     B: {
       on: {
-        B_TO_C: {
-          target: 'C',
-          actions: ['toCTrackerAnimation']
-        }
+        B_TO_C: 'C'
       }
     },
     C: {
       on: {
-        C_TO_B: {
-          target: 'B',
-          actions: ['toBTrackerAnimation']
-        },
-        C_TO_D: {
-          target: 'D',
-          actions: ['toDTrackerAnimation']
-        }
+        C_TO_B: 'B',
+        C_TO_D: 'D'
       }
     },
     D: {

@@ -9,12 +9,14 @@ import {Intro} from './slides/Intro';
 import {FiniteStateMachines} from './slides/FiniteStateMachines';
 import {ProblemsOfFSM} from './slides/ProblemsOfFSM';
 import {Statecharts} from './slides/Statecharts';
+import {XStateVSRedux} from './slides/XStateVSRedux';
 
 import {
   introSlideState,
   finiteStateMachinesSlideState,
   problemsOfFSMSlideState,
-  statechartsSlideState
+  statechartsSlideState,
+  xStateVSRedux
 } from './slides/slideStates'
 
 const GlobalStyles = createGlobalStyle`
@@ -36,13 +38,13 @@ const GlobalStyles = createGlobalStyle`
 
 const presentationMachine = Machine({
   id: 'presentation',
-  // initial: 'intro',
-  initial: 'statecharts',
+  initial: 'intro',
   states: {
     ...introSlideState,
     ...finiteStateMachinesSlideState,
     ...problemsOfFSMSlideState,
-    ...statechartsSlideState
+    ...statechartsSlideState,
+    ...xStateVSRedux
   }
 });
 
@@ -75,6 +77,8 @@ const Presentation = () => {
       {state.matches('problemsOfFSM') && <ProblemsOfFSM state={state}/>}
 
       {state.matches('statecharts') && <Statecharts state={state}/>}
+
+      {state.matches('xStateVSRedux') && <XStateVSRedux state={state}/>}
     </>
   );
 };

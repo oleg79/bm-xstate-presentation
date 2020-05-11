@@ -166,6 +166,7 @@ const Input = styled.input`
   width: 100%;
   height: 50px;
   font-size: 30px;
+  margin-bottom: 40px;
 `;
 
 const extendedStateMachine = Machine({
@@ -204,6 +205,12 @@ const extendedStateMachine = Machine({
     }
   }
 });
+
+
+const Text = styled.p`
+  color: white;
+  font-size: 30px;
+`;
 
 export const ExtendedStateExample = () => {
   const [animateState, setAnimateState] = React.useState('topLeft');
@@ -307,6 +314,8 @@ export const ExtendedStateExample = () => {
         >
 
           <Input disabled={!state.matches('B')} ref={inputRef} value={inputValue} onChange={handleChange}/>
+
+          <Text>{inputValue}</Text>  
 
         </ExampleContainer>
       </Container>

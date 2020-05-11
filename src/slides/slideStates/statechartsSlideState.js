@@ -5,7 +5,7 @@ const agendaState = {
     states: {
       stateTypes: {
         on: {
-          PREV: '#state-charts.intro',
+          PREV: '#statecharts.intro',
           NEXT: 'extendedState'
         }
       },
@@ -76,7 +76,7 @@ const examplesState = {
           code: {
             on: {
               PREV: 'interaction',
-              // NEXT: 'parallelExample'
+              NEXT: '#xstate-vs-redux'
             }
           }
         }
@@ -88,7 +88,7 @@ const examplesState = {
 
 export const statechartsSlideState = {
   statecharts: {
-    id: 'state-charts',
+    id: 'statecharts',
     initial: 'intro',
     states: {
       intro: {
