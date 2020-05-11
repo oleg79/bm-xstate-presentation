@@ -16,12 +16,6 @@ import {
   upArrowVariants
 } from './animationVariants'
 
-
-const Title = styled(motion.h1)`
-  position: absolute;
-  opacity: 0;
-`;
-
 const ExampleContainer = styled(motion.div)`
   width: 600px;
   height: 600px;

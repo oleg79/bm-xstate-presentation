@@ -8,7 +8,14 @@ import {blueGrey} from 'material-ui-colors';
 import {Intro} from './slides/Intro';
 import {FiniteStateMachines} from './slides/FiniteStateMachines';
 import {ProblemsOfFSM} from './slides/ProblemsOfFSM';
-import {StateCharts} from './slides/StateCharts';
+import {Statecharts} from './slides/Statecharts';
+
+import {
+  introSlideState,
+  finiteStateMachinesSlideState,
+  problemsOfFSMSlideState,
+  statechartsSlideState
+} from './slides/slideStates'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -25,97 +32,17 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+
+
 const presentationMachine = Machine({
   id: 'presentation',
-  initial: 'intro',
+  // initial: 'intro',
+  initial: 'statecharts',
   states: {
-    intro: {
-      on: {
-        NEXT: 'finiteStateMachines'
-      }
-    },
-    finiteStateMachines: {
-      id: 'finite-state-machines',
-      initial: 'intro',
-      states: {
-        intro: {
-          on: {
-            PREV: '#presentation.intro',
-            NEXT: 'content'
-          }
-        },
-        content: {
-          initial: 'interaction',
-          states: {
-            interaction: {
-              on: {
-                PREV: '#finite-state-machines.intro',
-                NEXT: 'terms'
-              },
-            },
-            terms: {
-              on: {
-                PREV: 'interaction',
-                NEXT: 'configurationSample'
-              },
-            },
-            configurationSample: {
-              on: {
-                PREV: 'terms',
-                NEXT: '#problems-of-fsm'
-              },
-            }
-          }
-        }
-      }
-    },
-    problemsOfFSM: {
-      id: 'problems-of-fsm',
-      initial: 'intro',
-      states: {
-        intro: {
-          on: {
-            PREV: '#finite-state-machines',
-            NEXT: 'content'
-          },
-        },
-        content: {
-          initial: 'stateExlposionProblem',
-          states: {
-            stateExlposionProblem: {
-              on: {
-                PREV: '#problems-of-fsm.intro',
-                NEXT: 'sideEffectsProblem'
-              },
-            },
-            sideEffectsProblem: {
-              on: {
-                PREV: 'stateExlposionProblem',
-                NEXT: '#state-charts'
-              },
-            }
-          }
-        }
-      },
-    },
-    stateCharts: {
-      id: 'state-charts',
-      initial: 'intro',
-      states: {
-        intro: {
-          on: {
-            PREV: '#finite-state-machines.intro',
-            NEXT: 'content'
-          }
-        },
-        content: {
-          on: {
-            PREV: '#state-charts.intro',
-            // NEXT: 'content'
-          }
-        },
-      }
-    }
+    ...introSlideState,
+    ...finiteStateMachinesSlideState,
+    ...problemsOfFSMSlideState,
+    ...statechartsSlideState
   }
 });
 
@@ -147,7 +74,7 @@ const Presentation = () => {
 
       {state.matches('problemsOfFSM') && <ProblemsOfFSM state={state}/>}
 
-      {state.matches('stateCharts') && <StateCharts state={state}/>}
+      {state.matches('statecharts') && <Statecharts state={state}/>}
     </>
   );
 };

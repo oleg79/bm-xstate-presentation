@@ -35,7 +35,7 @@ export const ProblemsOfFSM = ({state}) => {
   return (
     <SlideContainer name='state-charts'>
       <AnimatedTitle asTitle={state.matches('problemsOfFSM.intro')}>
-        Problems Of FSM
+        Problems Of FSM <Emoji>🤨</Emoji>
       </AnimatedTitle>
       <ContentContainer>
         {state.matches('problemsOfFSM.content') &&
