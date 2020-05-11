@@ -1,14 +1,13 @@
 import React from 'react';
-import {Machine} from 'xstate';
-import {useMachine} from '@xstate/react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion'
-import styled, {css} from 'styled-components';
-import {green, teal} from 'material-ui-colors';
+import { motion, AnimatePresence } from 'framer-motion'
+import styled from 'styled-components';
 import {Emoji} from '../../components/Emoji';
 import {SlideContainer} from '../../components/SlideContainer';
 import {AnimatedTitle} from '../../components/SlideTitle';
 import {HierarchicalExample} from './HierarchicalExample';
 import {HierarchicalCode} from './HierarchicalCode';
+import {ParallelExample} from './ParallelExample';
+import {ParallelCode} from './ParallelCode';
 
 const BigText = styled(motion.div)`
   width: 70%;
@@ -57,6 +56,9 @@ export const Statecharts = ({state}) => {
 
       {state.matches('statecharts.content.examples.hierarchical.interaction') && <HierarchicalExample/>}
       {state.matches('statecharts.content.examples.hierarchical.code') && <HierarchicalCode/>}
+
+      {state.matches('statecharts.content.examples.parallel.interaction') && <ParallelExample/>}
+      {state.matches('statecharts.content.examples.parallel.code') && <ParallelCode/>}
 
     </SlideContainer>
   );  
