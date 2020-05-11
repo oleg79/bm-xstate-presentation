@@ -6,14 +6,14 @@ import styled, {css} from 'styled-components';
 import {green, teal} from 'material-ui-colors';
 import { CopyBlock, dracula } from 'react-code-blocks';
 import {SlideContainer} from '../components/SlideContainer';
+import {AnimatedTitle} from '../components/SlideTitle';
 import {
   trackerVariants,
   stateVariants,
   rightArrowVariants,
   leftArrowVariants,
   downArrowVariants,
-  upArrowVariants,
-  titleVariants
+  upArrowVariants
 } from './animationVariants'
 
 
@@ -394,14 +394,9 @@ const ContentContainer = styled.div`
 export const FiniteStateMachines = ({state}) => {
   return (
     <SlideContainer name='finite-state-machines'>
-      <Title
-        animate={state.matches('finiteStateMachines.intro') ? 'asTitle' : 'asHeader'}
-        initial='asTitle'
-        variants={titleVariants}
-        transition={{ duration: 0.5 }}
-      >
+      <AnimatedTitle asTitle={state.matches('finiteStateMachines.intro')}>
         Finite State Machines
-      </Title>
+      </AnimatedTitle>
       <ContentContainer>
         {state.matches('finiteStateMachines.content') && <Example/>}
         {state.matches('finiteStateMachines.content.terms') && <Terms/>}

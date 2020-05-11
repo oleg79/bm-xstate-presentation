@@ -7,6 +7,8 @@ import {blueGrey} from 'material-ui-colors';
 
 import {Intro} from './slides/Intro';
 import {FiniteStateMachines} from './slides/FiniteStateMachines';
+import {ProblemsOfFSM} from './slides/ProblemsOfFSM';
+import {StateCharts} from './slides/StateCharts';
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -47,7 +49,7 @@ const presentationMachine = Machine({
           states: {
             interaction: {
               on: {
-                PREV: '#presentation.intro',
+                PREV: '#finite-state-machines.intro',
                 NEXT: 'terms'
               },
             },
@@ -60,13 +62,60 @@ const presentationMachine = Machine({
             configurationSample: {
               on: {
                 PREV: 'terms',
-                // NEXT: 'terms'
+                NEXT: '#problems-of-fsm'
               },
             }
           }
         }
       }
     },
+    problemsOfFSM: {
+      id: 'problems-of-fsm',
+      initial: 'intro',
+      states: {
+        intro: {
+          on: {
+            PREV: '#finite-state-machines',
+            NEXT: 'content'
+          },
+        },
+        content: {
+          initial: 'stateExlposionProblem',
+          states: {
+            stateExlposionProblem: {
+              on: {
+                PREV: '#problems-of-fsm.intro',
+                NEXT: 'sideEffectsProblem'
+              },
+            },
+            sideEffectsProblem: {
+              on: {
+                PREV: 'stateExlposionProblem',
+                NEXT: '#state-charts'
+              },
+            }
+          }
+        }
+      },
+    },
+    stateCharts: {
+      id: 'state-charts',
+      initial: 'intro',
+      states: {
+        intro: {
+          on: {
+            PREV: '#finite-state-machines.intro',
+            NEXT: 'content'
+          }
+        },
+        content: {
+          on: {
+            PREV: '#state-charts.intro',
+            // NEXT: 'content'
+          }
+        },
+      }
+    }
   }
 });
 
@@ -95,6 +144,10 @@ const Presentation = () => {
       {state.matches('intro') &&<Intro/>}
 
       {state.matches('finiteStateMachines') && <FiniteStateMachines state={state}/>}
+
+      {state.matches('problemsOfFSM') && <ProblemsOfFSM state={state}/>}
+
+      {state.matches('stateCharts') && <StateCharts state={state}/>}
     </>
   );
 };

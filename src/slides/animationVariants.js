@@ -21,23 +21,6 @@ export const leftArrowVariants = {
   }
 };
 
-export const titleVariants = {
-  asTitle: {
-    top: '50%',
-    left: '50%',
-    transform: 'translateY(-50%) translateX(-50%)',
-    fontSize: '70px',
-    opacity: 1
-  },
-  asHeader: {
-    top: '10px',
-    left: '20px',
-    transform: 'translateY(0%) translateX(0%)',
-    fontSize: '20px',
-    opacity: 1
-  }
-};
-
 export const rightArrowVariants = {
   idle: {
     rotate: -45,
